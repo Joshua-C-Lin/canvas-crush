@@ -974,6 +974,5 @@ window.onload = function () {
       ),
     };
   }
-
   init();
 };

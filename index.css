@@ -1,6 +1,11 @@
-body {
-  background-color: gray;
+:root {
+  --body-background: gray;
 }
+
+body {
+  background-color: var(--body-background);
+}
+
 .wrapper {
   width: 610px;
   margin: 100px auto;
