@@ -1,0 +1,12 @@
+body {
+  background-color: gray;
+}
+.wrapper {
+  width: 610px;
+  margin: 100px auto;
+  padding: 25px;
+}
+
+#game-board{
+  margin: 100px auto;
+}
