@@ -4,7 +4,30 @@ window.onload = function () {
   const canvas = document.getElementById("game-board");
   const context = canvas.getContext("2d");
 
-  const playerName = "Joshua";
+  let playerName = "";
+
+  // 取消按鈕
+  const cancelBtn = document.getElementById("cancel-btn");
+  cancelBtn.addEventListener("click", () => {
+    document.getElementById("welcome-board").style.display = "none";
+  });
+  
+  // 非同步取得用戶名稱
+  function getUserName() {
+    return new Promise((resolve) => {
+      const data = document.getElementById("user-name").value;
+      console.log(data);
+      resolve(data);
+    });
+  }
+
+  // 確認按鈕
+  const submitBtn = document.getElementById("submit-btn");
+  submitBtn.addEventListener("click", async () => {
+    // 輸入框資料
+    playerName = await getUserName();
+    document.getElementById("welcome-board").style.display = "none";
+  });
 
   // FPS 初始化參數
   let lastFrame = 0;
@@ -242,7 +265,7 @@ window.onload = function () {
     // 繪製分數
     context.fillStyle = "#000000";
     context.font = "24px Verdana";
-    drawCenterText("Score:", 30, klotski.y + 40, 150);
+    drawCenterText("Score: ", 30, klotski.y + 40, 150);
     drawCenterText(score.toLocaleString(), 30, klotski.y + 70, 150);
 
     // 繪製按鈕
@@ -301,7 +324,11 @@ window.onload = function () {
     // 繪製 title
     context.fillStyle = "#ffffff";
     context.font = "24px Verdana";
-    context.fillText("Joshua Crush", 10, 30);
+    context.fillText(
+      playerName ? `Player: ${playerName}` : "Joshua Crush",
+      10,
+      30
+    );
 
     // 繪製 fps
     context.fillStyle = "#ffffff";
@@ -350,7 +377,7 @@ window.onload = function () {
 
         // 檢查是否存在磁磚
         if (klotski.tiles[i][j].type >= 0) {
-          // 取得磁磚顏色
+          // 準備要上色的磁磚
           let col = tileColors[klotski.tiles[i][j].type];
 
           // 繪製磁磚顏色
@@ -363,7 +390,7 @@ window.onload = function () {
             klotski.selectedTile.column == i &&
             klotski.selectedTile.row == j
           ) {
-            // 繪製一個紅色磁磚
+            // 標記為紅色磁磚
             drawTile(coord.tileX, coord.tileY, 255, 0, 0);
           }
         }
@@ -417,7 +444,7 @@ window.onload = function () {
 
       // 根據動畫狀態更改順序
       if (animationState == 2) {
-        // 繪製磁磚
+        // 繪製磁磚交互
         drawTile(
           coord1shift.tileX,
           coord1shift.tileY,
@@ -433,7 +460,7 @@ window.onload = function () {
           col2[2]
         );
       } else {
-        // 繪製磁磚
+        // 繪製磁磚交互
         drawTile(
           coord2shift.tileX,
           coord2shift.tileY,
@@ -471,32 +498,32 @@ window.onload = function () {
   }
 
   // 渲染配對顯示消除特效
-  function renderClusters() {
-    for (var i = 0; i < clusters.length; i++) {
-      // 計算磁磚座標
-      let coord = getTileCoordinate(clusters[i].column, clusters[i].row, 0, 0);
+  // function renderClusters() {
+  //   for (var i = 0; i < clusters.length; i++) {
+  //     // 計算磁磚座標
+  //     let coord = getTileCoordinate(clusters[i].column, clusters[i].row, 0, 0);
 
-      if (clusters[i].horizontal) {
-        // 消除提示 畫一條水平線
-        context.fillStyle = "#B3D9D9";
-        context.fillRect(
-          coord.tileX + klotski.tileWidth / 2,
-          coord.tileY + klotski.tileHeight / 2 - 4,
-          (clusters[i].length - 1) * klotski.tileWidth,
-          8
-        );
-      } else {
-        // 消除提示 畫一條垂直線
-        context.fillStyle = "#B3D9D9";
-        context.fillRect(
-          coord.tileX + klotski.tileWidth / 2 - 4,
-          coord.tileY + klotski.tileHeight / 2,
-          8,
-          (clusters[i].length - 1) * klotski.tileHeight
-        );
-      }
-    }
-  }
+  //     if (clusters[i].horizontal) {
+  //       // 消除提示 畫一條水平線
+  //       context.fillStyle = "#B3D9D9";
+  //       context.fillRect(
+  //         coord.tileX + klotski.tileWidth / 2,
+  //         coord.tileY + klotski.tileHeight / 2 - 4,
+  //         (clusters[i].length - 1) * klotski.tileWidth,
+  //         8
+  //       );
+  //     } else {
+  //       // 消除提示 畫一條垂直線
+  //       context.fillStyle = "#B3D9D9";
+  //       context.fillRect(
+  //         coord.tileX + klotski.tileWidth / 2 - 4,
+  //         coord.tileY + klotski.tileHeight / 2,
+  //         8,
+  //         (clusters[i].length - 1) * klotski.tileHeight
+  //       );
+  //     }
+  //   }
+  // }
 
   // 渲染位移
   function renderMoves() {
@@ -505,18 +532,22 @@ window.onload = function () {
       let coord1 = getTileCoordinate(moves[i].column1, moves[i].row1, 0, 0);
       let coord2 = getTileCoordinate(moves[i].column2, moves[i].row2, 0, 0);
 
-      // 從磁磚 1 到 2 連一條線
+      // 從磁磚 1 到 2 提示連線
       context.strokeStyle = "#ff0000";
       context.beginPath();
+      // 起始點
       context.moveTo(
         coord1.tileX + klotski.tileWidth / 2,
         coord1.tileY + klotski.tileHeight / 2
       );
+      // 結束點
       context.lineTo(
         coord2.tileX + klotski.tileWidth / 2,
         coord2.tileY + klotski.tileHeight / 2
       );
+      // 繪製
       context.stroke();
+      console.log("NONE");
     }
   }
 
@@ -580,7 +611,7 @@ window.onload = function () {
       // 移除配對
       removeClusters();
 
-      // 互換磁磚
+      // 移動並且補充
       shiftTiles();
 
       // 搜尋是否還有配對
@@ -739,7 +770,7 @@ window.onload = function () {
   // 移除配對
   function removeClusters() {
     // 將磁磚的 type = -1 表示已移除磁磚
-    loopClusters(function (index, column, row, cluster) {
+    loopClusters((index, column, row, cluster) => {
       klotski.tiles[column][row].type = -1;
     });
 
@@ -771,7 +802,7 @@ window.onload = function () {
           klotski.tiles[i][j].type = getRandomTile();
         } else {
           // 互換磁磚去移動它
-          var shift = klotski.tiles[i][j].shift;
+          let shift = klotski.tiles[i][j].shift;
           if (shift > 0) {
             swap(i, j, i, j + shift);
           }
