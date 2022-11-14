@@ -6,11 +6,37 @@ window.onload = function () {
 
   let playerName = "";
 
-  // 取消按鈕
-  const cancelBtn = document.getElementById("cancel-btn");
-  cancelBtn.addEventListener("click", () => {
-    document.getElementById("welcome-board").style.display = "none";
-  });
+  // HTML 彈窗生成
+  const mainCube = document.createElement("div");
+  mainCube.className = "input-items";
+
+  const hTitle = document.createElement("h3");
+  hTitle.innerText = "請輸入您的暱稱";
+
+  const inputBlock = document.createElement("input");
+  inputBlock.id = "user-name";
+
+  const btnArea = document.createElement("div");
+  btnArea.className = "btn-area";
+
+  const cancelDeBtn = document.createElement("div");
+  cancelDeBtn.id = "cancel-btn";
+  cancelDeBtn.className = "btn-style cancel";
+  cancelDeBtn.innerText = "取消";
+
+  const submitDeBtn = document.createElement("div");
+  submitDeBtn.id = "submit-btn";
+  submitDeBtn.className = "btn-style submit";
+  submitDeBtn.innerText = "確定";
+
+  const welcomeBoard = document.getElementById("welcome-board");
+
+  welcomeBoard.appendChild(mainCube);
+  mainCube.appendChild(hTitle);
+  mainCube.appendChild(inputBlock);
+  mainCube.appendChild(btnArea);
+  btnArea.appendChild(cancelDeBtn);
+  btnArea.appendChild(submitDeBtn);
 
   // 非同步取得用戶名稱
   function getUserName() {
@@ -20,6 +46,12 @@ window.onload = function () {
       resolve(data);
     });
   }
+
+  // 取消按鈕
+  const cancelBtn = document.getElementById("cancel-btn");
+  cancelBtn.addEventListener("click", () => {
+    document.getElementById("welcome-board").style.display = "none";
+  });
 
   // 確認按鈕
   const submitBtn = document.getElementById("submit-btn");
