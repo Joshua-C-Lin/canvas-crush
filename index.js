@@ -11,7 +11,7 @@ window.onload = function () {
   cancelBtn.addEventListener("click", () => {
     document.getElementById("welcome-board").style.display = "none";
   });
-  
+
   // 非同步取得用戶名稱
   function getUserName() {
     return new Promise((resolve) => {
@@ -547,7 +547,6 @@ window.onload = function () {
       );
       // 繪製
       context.stroke();
-      console.log("NONE");
     }
   }
 
