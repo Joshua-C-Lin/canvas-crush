@@ -66,3 +66,19 @@ body {
 .submit{
   background-color: skyblue;
 }
+
+.joshua-test{
+  background-color: skyblue;
+  font-size: 1.5rem;
+  text-align: center;
+  line-height: 100px;
+  transition: width 1s, height 1s, line-height 1s;
+  height: 100px;
+  width: 100px;
+}
+
+.joshua-test:hover {
+  height: 150px;
+  width: 150px;
+  line-height: 150px;
+}
