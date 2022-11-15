@@ -1,65 +1,82 @@
+// 宣告用戶名稱
+let playerName = "";
+
+function getUserName(enterYourName, defaultName) {
+  return new Promise((resolve) => {
+    console.log("等待用戶輸入名稱");
+    // HTML 彈窗生成
+    const mainCube = document.createElement("div");
+    mainCube.className = "input-items";
+
+    const hTitle = document.createElement("h3");
+    hTitle.innerText = enterYourName;
+
+    const inputBlock = document.createElement("input");
+    inputBlock.id = "user-name";
+    inputBlock.value = defaultName;
+
+    const btnArea = document.createElement("div");
+    btnArea.className = "btn-area";
+
+    const cancelDeBtn = document.createElement("div");
+    cancelDeBtn.id = "cancel-btn";
+    cancelDeBtn.className = "btn-style cancel";
+    cancelDeBtn.innerText = "取消";
+
+    const submitDeBtn = document.createElement("div");
+    submitDeBtn.id = "submit-btn";
+    submitDeBtn.className = "btn-style submit";
+    submitDeBtn.innerText = "確定";
+
+    const welcomeBoard = document.getElementById("welcome-board");
+    welcomeBoard.style.display = "block";
+
+    welcomeBoard.appendChild(mainCube);
+    mainCube.appendChild(hTitle);
+    mainCube.appendChild(inputBlock);
+    mainCube.appendChild(btnArea);
+    btnArea.appendChild(cancelDeBtn);
+    btnArea.appendChild(submitDeBtn);
+
+    // 取消按鈕
+    const cancelBtn = document.getElementById("cancel-btn");
+    cancelBtn.addEventListener("click", () => {
+      document.getElementById("welcome-board").style.display = "none";
+    });
+
+    // 確認按鈕
+    const submitBtn = document.getElementById("submit-btn");
+    submitBtn.addEventListener("click", () => {
+      // 輸入框資料
+      const data = document.getElementById("user-name").value;
+      console.log('用戶輸入的名稱為：', data);
+      document.getElementById("welcome-board").style.display = "none";
+      console.log("點擊送出");
+
+      // 最後將取得的用戶名稱送出
+      resolve(data);
+    });
+  });
+}
+
+// 非同步取得資料
+async function getPlayerNameProcess(enterYourName, defaultName) {
+  console.log("非同步取得資料開始");
+  const name = await getUserName(enterYourName, defaultName);
+  console.log("非同步取得資料結束");
+  // 賦予用戶輸入的名稱給遊戲名稱
+  playerName = name;
+  return playerName;
+}
+
+
 // 當頁面家在完成後執行以下程式
 window.onload = function () {
+  // getPlayerNameProcess("請輸入您的暱稱", "預設名稱");
+
   // 宣告 canvas 以及 context
   const canvas = document.getElementById("game-board");
   const context = canvas.getContext("2d");
-
-  let playerName = "";
-
-  // HTML 彈窗生成
-  const mainCube = document.createElement("div");
-  mainCube.className = "input-items";
-
-  const hTitle = document.createElement("h3");
-  hTitle.innerText = "請輸入您的暱稱";
-
-  const inputBlock = document.createElement("input");
-  inputBlock.id = "user-name";
-
-  const btnArea = document.createElement("div");
-  btnArea.className = "btn-area";
-
-  const cancelDeBtn = document.createElement("div");
-  cancelDeBtn.id = "cancel-btn";
-  cancelDeBtn.className = "btn-style cancel";
-  cancelDeBtn.innerText = "取消";
-
-  const submitDeBtn = document.createElement("div");
-  submitDeBtn.id = "submit-btn";
-  submitDeBtn.className = "btn-style submit";
-  submitDeBtn.innerText = "確定";
-
-  const welcomeBoard = document.getElementById("welcome-board");
-
-  welcomeBoard.appendChild(mainCube);
-  mainCube.appendChild(hTitle);
-  mainCube.appendChild(inputBlock);
-  mainCube.appendChild(btnArea);
-  btnArea.appendChild(cancelDeBtn);
-  btnArea.appendChild(submitDeBtn);
-
-  // 非同步取得用戶名稱
-  function getUserName() {
-    return new Promise((resolve) => {
-      const data = document.getElementById("user-name").value;
-      console.log(data);
-      resolve(data);
-    });
-  }
-
-  // 取消按鈕
-  const cancelBtn = document.getElementById("cancel-btn");
-  cancelBtn.addEventListener("click", () => {
-    document.getElementById("welcome-board").style.display = "none";
-  });
-
-  // 確認按鈕
-  const submitBtn = document.getElementById("submit-btn");
-  submitBtn.addEventListener("click", async () => {
-    // 輸入框資料
-    playerName = await getUserName();
-    document.getElementById("welcome-board").style.display = "none";
-  });
 
   // FPS 初始化參數
   let lastFrame = 0;
