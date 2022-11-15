@@ -72,7 +72,7 @@ async function getPlayerNameProcess(enterYourName, defaultName) {
 
 // 當頁面家在完成後執行以下程式
 window.onload = function () {
-  // getPlayerNameProcess("請輸入您的暱稱", "預設名稱");
+  getPlayerNameProcess("請輸入您的暱稱", "預設名稱");
 
   // 宣告 canvas 以及 context
   const canvas = document.getElementById("game-board");
